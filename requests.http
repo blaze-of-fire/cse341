@@ -1,1 +1,3 @@
-GET http://localhost:8080/professional
+GET https://cse341project2-lgxa.onrender.com
+
+GET https://localhost:3000
