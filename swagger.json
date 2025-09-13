@@ -5,10 +5,9 @@
     "description": "This API is intended for a assignment in CSE 341 to learn how to use Swagger for API Documentation.",
     "version": "1.0.0"
   },
-  "host": "https://cse341project2-lgxa.onrender.com",
+  "host": "cse341project2-lgxa.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http",
     "https"
   ],
   "paths": {
