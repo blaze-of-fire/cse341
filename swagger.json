@@ -115,21 +115,19 @@
             "in": "path",
             "required": true,
             "type": "string"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "firstName": { "type": "string" },
-                  "lastName": { "type": "string" },
-                  "email": { "type": "string" },
-                  "favoriteColor": { "type": "string" },
-                  "birthday": { "type": "string" }
-                }
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstName": { "type": "string" },
+                "lastName": { "type": "string" },
+                "email": { "type": "string" },
+                "favoriteColor": { "type": "string" },
+                "birthday": { "type": "string" }
               },
               "example": {
                 "email": "updatedemail@example.com",
@@ -137,7 +135,7 @@
               }
             }
           }
-        },
+        ],
         "responses": {
           "200": { "description": "OK" },
           "400": { "description": "Bad Request" },
