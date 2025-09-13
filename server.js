@@ -2,10 +2,11 @@ const express = require('express');
 const app = express();
 
 const mongodb = require('./src/data/database');
+const indexRouter = require('./src/routes/index');
 
 const port = process.env.PORT || 3000;
 
-const indexRouter = require('./src/routes/index');
+app.use(express.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
