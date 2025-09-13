@@ -3,6 +3,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 // Create a new contact
 const createContact = async (req, res) => {
+  // #swagger.tags=['Contacts']
   const { firstName, lastName, email, favoriteColor, birthday } = req.body;
 
   if (!firstName) {
@@ -34,6 +35,7 @@ const createContact = async (req, res) => {
 
 // retrieve all contacts
 const getAllContacts = async (req, res) => {
+    // #swagger.tags=['Contacts']
     const result = await mongodb.getDatabase().db("w01-project-2").collection("contacts").find();
     result.toArray().then((contacts) => {
         res.setHeader('Content-Type', 'application/json');
@@ -43,6 +45,7 @@ const getAllContacts = async (req, res) => {
 
 // retrieve contact by id
 const getContactById = async (req, res) => {
+    // #swagger.tags=['Contacts']
     const userId = new ObjectId(req.params.id);
     const result = await mongodb.getDatabase().db("w01-project-2").collection("contacts").find({ _id: userId });
     result.toArray().then((contacts) => {
@@ -53,6 +56,7 @@ const getContactById = async (req, res) => {
 
 // Update a contact by ID
 const updateContact = async (req, res) => {
+    // #swagger.tags=['Contacts']
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).json({ message: 'Data to update can not be empty!' });
   }
@@ -78,6 +82,7 @@ const updateContact = async (req, res) => {
 
 // Delete a contact by ID
 const deleteContact = async (req, res) => {
+    // #swagger.tags=['Contacts']
   const contactId = new ObjectId(req.params.id);
 
   try {
@@ -99,6 +104,7 @@ const deleteContact = async (req, res) => {
 
 // Delete all contacts
 const deleteAllContacts = async (req, res) => {
+    // #swagger.tags=['Contacts']
   try {
     const result = await mongodb
       .getDatabase()
