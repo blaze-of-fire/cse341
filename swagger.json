@@ -107,10 +107,8 @@
         }
       },
       "put": {
-        "tags": [
-          "Contacts"
-        ],
-        "description": "",
+        "tags": ["Contacts"],
+        "description": "Update a contact by ID",
         "parameters": [
           {
             "name": "id",
@@ -119,19 +117,32 @@
             "type": "string"
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": { "type": "string" },
+                  "lastName": { "type": "string" },
+                  "email": { "type": "string" },
+                  "favoriteColor": { "type": "string" },
+                  "birthday": { "type": "string" }
+                }
+              },
+              "example": {
+                "email": "updatedemail@example.com",
+                "favoriteColor": "Blue"
+              }
+            }
           }
+        },
+        "responses": {
+          "200": { "description": "OK" },
+          "400": { "description": "Bad Request" },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "delete": {
