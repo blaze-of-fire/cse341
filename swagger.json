@@ -130,8 +130,11 @@
                 "birthday": { "type": "string" }
               },
               "example": {
+                "firstName": "UpdatedFirstName",
+                "lastName": "UpdatedLastName",
                 "email": "updatedemail@example.com",
-                "favoriteColor": "Blue"
+                "favoriteColor": "Blue",
+                "birthday": "01/01/2001"
               }
             }
           }
