@@ -1,13 +1,14 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Contacts API",
-    "description": "This API is intended for a assignment in CSE 341 to learn how to use Swagger for API Documentation.",
+    "title": "Animals API",
+    "description": "This API is intended to give access to animal information from a database.",
     "version": "1.0.0"
   },
-  "host": "cse341project2-lgxa.onrender.com",
+  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
+    "http",
     "https"
   ],
   "paths": {
@@ -24,10 +25,20 @@
         }
       }
     },
-    "/contacts/": {
+    "/api-docs": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/animals/": {
       "get": {
         "tags": [
-          "Contacts"
+          "Animals"
         ],
         "description": "",
         "produces": [
@@ -41,7 +52,7 @@
       },
       "post": {
         "tags": [
-          "Contacts"
+          "Animals"
         ],
         "description": "",
         "parameters": [
@@ -51,19 +62,25 @@
             "schema": {
               "type": "object",
               "properties": {
-                "firstName": {
+                "animalType": {
                   "example": "any"
                 },
-                "lastName": {
+                "color": {
                   "example": "any"
                 },
-                "email": {
+                "commonName": {
                   "example": "any"
                 },
-                "favoriteColor": {
+                "coolFact": {
                   "example": "any"
                 },
-                "birthday": {
+                "habitat": {
+                  "example": "any"
+                },
+                "mainFoodSource": {
+                  "example": "any"
+                },
+                "scientificName": {
                   "example": "any"
                 }
               }
@@ -83,10 +100,10 @@
         }
       }
     },
-    "/contacts/{id}": {
+    "/animals/{id}": {
       "get": {
         "tags": [
-          "Contacts"
+          "Animals"
         ],
         "description": "",
         "produces": [
@@ -107,48 +124,36 @@
         }
       },
       "put": {
-        "tags": ["Contacts"],
-        "description": "Update a contact by ID",
+        "tags": [
+          "Animals"
+        ],
+        "description": "",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "firstName": { "type": "string" },
-                "lastName": { "type": "string" },
-                "email": { "type": "string" },
-                "favoriteColor": { "type": "string" },
-                "birthday": { "type": "string" }
-              },
-              "example": {
-                "firstName": "UpdatedFirstName",
-                "lastName": "UpdatedLastName",
-                "email": "updatedemail@example.com",
-                "favoriteColor": "Blue",
-                "birthday": "01/01/2001"
-              }
-            }
           }
         ],
         "responses": {
-          "200": { "description": "OK" },
-          "400": { "description": "Bad Request" },
-          "404": { "description": "Not Found" },
-          "500": { "description": "Internal Server Error" }
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
         }
       },
       "delete": {
         "tags": [
-          "Contacts"
+          "Animals"
         ],
         "description": "",
         "parameters": [
