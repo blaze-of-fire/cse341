@@ -36,29 +36,46 @@ const createAnimal = async (req, res) => {
 };
 
 // retrieve all animals
-const getAllAnimals = async (req, res) => {
-    // #swagger.tags=['Animals']
-    const result = await mongodb.getDatabase().db("w03-through-w04").collection("animals").find();
-    result.toArray().then((animals) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(animals);
+const getAllAnimals = (req, res) => {
+      // #swagger.tags=['Animals']
+  mongodb
+    .getDatabase()
+    .db('w03-through-w04')
+    .collection('animals')
+    .find()
+    .toArray((err, animals) => {
+      if (err) {
+        res.status(400).json({ message: err });
+      }
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json(animals);
     });
 };
 
-// retrieve animal by id
-const getAnimalById = async (req, res) => {
-    // #swagger.tags=['Animals']
-    const animalId = new ObjectId(req.params.id);
-    const result = await mongodb.getDatabase().db("w03-through-w04").collection("animals").find({ _id: animalId });
-    result.toArray().then((animals) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(animals[0]);
+// retrieve a single animal by id
+const getAnimalById = (req, res) => {
+      // #swagger.tags=['Animals']
+  const animalId = new ObjectId(req.params.id);
+  mongodb
+    .getDatabase()
+    .db('w03-through-w04')
+    .collection('animals')
+    .find({ _id: animalId })
+    .toArray((err, result) => {
+      if (err) {
+        res.status(400).json({ message: err });
+      }
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json(result[0]);
     });
 };
 
 // Update a animal by ID
 const updateAnimal = async (req, res) => {
     // #swagger.tags=['Animals']
+    if (!ObjectId.isValid(req.params.id)) {
+      res.status(400).json('Must use a valid animal id to update an animal.');
+    }
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).json({ message: 'Data to update can not be empty!' });
   }
@@ -85,6 +102,9 @@ const updateAnimal = async (req, res) => {
 // Delete a animal by ID
 const deleteAnimal = async (req, res) => {
     // #swagger.tags=['Animals']
+    if (!ObjectId.isValid(req.params.id)) {
+      res.status(400).json('Must use a valid animal id to delete an animal.');
+    }
   const animalId = new ObjectId(req.params.id);
 
   try {

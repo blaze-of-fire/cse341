@@ -1,5 +1,5 @@
 {
-  "name": "animals-api",
+  "name": "animals-and-furniture-api",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -16,7 +16,7 @@
     "express": "^5.1.0",
     "mongodb": "^6.19.0",
     "swagger-autogen": "^2.23.7",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "validatorjs": "^3.22.1"
   }
 }
-

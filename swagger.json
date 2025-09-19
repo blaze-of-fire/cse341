@@ -1,180 +1,316 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Animals API",
-    "description": "This API is intended to give access to animal information from a database.",
+    "title": "Animals and Furniture API",
+    "description": "This API gives CRUD access to animal and furniture records.",
     "version": "1.0.0"
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http",
-    "https"
-  ],
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "paths": {
     "/": {
       "get": {
-        "tags": [
-          "Hello World"
-        ],
-        "description": "",
+        "tags": ["Hello World"],
+        "summary": "Root endpoint",
         "responses": {
-          "200": {
-            "description": "OK"
-          }
+          "200": { "description": "OK" }
         }
       }
     },
-    "/api-docs": {
+    "/animals": {
       "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/animals/": {
-      "get": {
-        "tags": [
-          "Animals"
-        ],
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["Animals"],
+        "summary": "List all animals",
         "responses": {
           "200": {
-            "description": "OK"
-          }
+            "description": "An array of animals",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Animal" }
+            }
+          },
+          "400": { "description": "Bad Request – database error" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "post": {
-        "tags": [
-          "Animals"
-        ],
-        "description": "",
+        "tags": ["Animals"],
+        "summary": "Create a new animal",
         "parameters": [
           {
-            "name": "body",
             "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "animalType": {
-                  "example": "any"
-                },
-                "color": {
-                  "example": "any"
-                },
-                "commonName": {
-                  "example": "any"
-                },
-                "coolFact": {
-                  "example": "any"
-                },
-                "habitat": {
-                  "example": "any"
-                },
-                "mainFoodSource": {
-                  "example": "any"
-                },
-                "scientificName": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "animal",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Animal" }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "Animal created",
+            "schema": { "$ref": "#/definitions/Animal" }
           },
-          "400": {
-            "description": "Bad Request"
+          "400": { "description": "Bad Request – missing commonName" },
+          "412": {
+            "description": "Validation failed",
+            "schema": { "$ref": "#/definitions/ValidationError" }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
     "/animals/{id}": {
       "get": {
-        "tags": [
-          "Animals"
-        ],
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
+        "tags": ["Animals"],
+        "summary": "Get an animal by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "description": "MongoDB ObjectId"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          }
+            "description": "The requested animal",
+            "schema": { "$ref": "#/definitions/Animal" }
+          },
+          "400": {
+            "description": "Bad Request – invalid ID format",
+            "schema": { "$ref": "#/definitions/ValidationError" }
+          },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "put": {
-        "tags": [
-          "Animals"
-        ],
-        "description": "",
+        "tags": ["Animals"],
+        "summary": "Update an animal by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "description": "MongoDB ObjectId"
+          },
+          {
+            "in": "body",
+            "name": "animal",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Animal" }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Animal updated successfully",
+            "schema": { "$ref": "#/definitions/Animal" }
           },
-          "400": {
-            "description": "Bad Request"
+          "400": { "description": "Bad Request – invalid ID or empty body" },
+          "404": { "description": "Not Found" },
+          "412": {
+            "description": "Validation failed",
+            "schema": { "$ref": "#/definitions/ValidationError" }
           },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "500": { "description": "Internal Server Error" }
         }
       },
       "delete": {
-        "tags": [
-          "Animals"
-        ],
-        "description": "",
+        "tags": ["Animals"],
+        "summary": "Delete an animal by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "description": "MongoDB ObjectId"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Animal deleted successfully" },
+          "400": {
+            "description": "Bad Request – invalid ID format",
+            "schema": { "$ref": "#/definitions/ValidationError" }
+          },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/furniture": {
+      "get": {
+        "tags": ["Furniture"],
+        "summary": "List all furniture",
+        "responses": {
+          "200": {
+            "description": "An array of furniture items",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Furniture" }
+            }
+          },
+          "400": { "description": "Bad Request – database error" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "post": {
+        "tags": ["Furniture"],
+        "summary": "Create a new furniture item",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "furniture",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Furniture" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Furniture created",
+            "schema": { "$ref": "#/definitions/Furniture" }
+          },
+          "400": { "description": "Bad Request – missing name" },
+          "412": {
+            "description": "Validation failed",
+            "schema": { "$ref": "#/definitions/ValidationError" }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/furniture/{id}": {
+      "get": {
+        "tags": ["Furniture"],
+        "summary": "Get a furniture item by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "description": "MongoDB ObjectId"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "The requested furniture item",
+            "schema": { "$ref": "#/definitions/Furniture" }
           },
-          "404": {
-            "description": "Not Found"
+          "400": {
+            "description": "Bad Request – invalid ID format",
+            "schema": { "$ref": "#/definitions/ValidationError" }
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
         }
+      },
+      "put": {
+        "tags": ["Furniture"],
+        "summary": "Update a furniture item by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "description": "MongoDB ObjectId"
+          },
+          {
+            "in": "body",
+            "name": "furniture",
+            "required": true,
+            "schema": { "$ref": "#/definitions/Furniture" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Furniture updated successfully",
+            "schema": { "$ref": "#/definitions/Furniture" }
+          },
+          "400": { "description": "Bad Request – invalid ID or empty body" },
+          "404": { "description": "Not Found" },
+          "412": {
+            "description": "Validation failed",
+            "schema": { "$ref": "#/definitions/ValidationError" }
+          },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "delete": {
+        "tags": ["Furniture"],
+        "summary": "Delete a furniture item by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{24}$",
+            "description": "MongoDB ObjectId"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Furniture deleted successfully" },
+          "400": {
+            "description": "Bad Request – invalid ID format",
+            "schema": { "$ref": "#/definitions/ValidationError" }
+          },
+          "404": { "description": "Not Found" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Animal": {
+      "type": "object",
+      "required": [
+        "animalType",
+        "color",
+        "commonName",
+        "habitat",
+        "mainFoodSource",
+        "scientificName"
+      ],
+      "properties": {
+        "animalType": { "type": "string" },
+        "color": { "type": "string" },
+        "commonName": { "type": "string" },
+        "coolFact": { "type": "string" },
+        "habitat": { "type": "string" },
+        "mainFoodSource": { "type": "string" },
+        "scientificName": { "type": "string" }
+      }
+    },
+    "Furniture": {
+      "type": "object",
+      "required": ["name", "color", "roomPlacement"],
+      "properties": {
+        "name": { "type": "string" },
+        "color": { "type": "string" },
+        "description": { "type": "string" },
+        "priceRange": { "type": "string" },
+        "estimatedAge": { "type": "string" },
+        "roomPlacement": { "type": "string" },
+        "pickupLocation": { "type": "string" }
+      }
+    },
+    "ValidationError": {
+      "type": "object",
+      "properties": {
+        "success": { "type": "boolean" },
+        "message": { "type": "string" },
+        "data": { "type": "object" }
       }
     }
   }

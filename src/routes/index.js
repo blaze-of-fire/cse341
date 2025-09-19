@@ -9,4 +9,6 @@ router.get("/", (req, res) => {
 
 router.use("/animals", require("./animals"));
 
+router.use("/furniture", require("./furniture"));
+
 module.exports = router;
