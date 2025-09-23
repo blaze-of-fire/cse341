@@ -71,6 +71,7 @@ const getFurnitureById = async (req, res) => {
 // Update a furniture by ID
 const updateFurniture = async (req, res) => {
     // #swagger.tags=['Furniture']
+    
     if (!ObjectId.isValid(req.params.id)) {
       res.status(412).json('Must use a valid furniture id to update a piece of furniture.');
     }
