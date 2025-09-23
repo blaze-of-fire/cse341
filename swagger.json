@@ -5,9 +5,9 @@
     "description": "This API gives CRUD access to animal and furniture records.",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "cse341-animals-furniture-api.onrender.com",
   "basePath": "/",
-  "schemes": ["http", "https"],
+  "schemes": ["https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
@@ -84,7 +84,15 @@
             "description": "Bad Request – invalid ID format",
             "schema": { "$ref": "#/definitions/ValidationError" }
           },
-          "404": { "description": "Not Found" },
+          "404": {
+            "description": "Animal not found",
+            "schema": { "$ref": "#/definitions/ErrorResponse" },
+            "examples": {
+              "application/json": {
+                "message": "Animal not found"
+              }
+            }
+          },
           "500": { "description": "Internal Server Error" }
         }
       },
@@ -209,7 +217,15 @@
             "description": "Bad Request – invalid ID format",
             "schema": { "$ref": "#/definitions/ValidationError" }
           },
-          "404": { "description": "Not Found" },
+          "404": {
+            "description": "Furniture not found",
+            "schema": { "$ref": "#/definitions/ErrorResponse" },
+            "examples": {
+              "application/json": {
+                "message": "Furniture not found"
+              }
+            }
+          },
           "500": { "description": "Internal Server Error" }
         }
       },
@@ -311,6 +327,12 @@
         "success": { "type": "boolean" },
         "message": { "type": "string" },
         "data": { "type": "object" }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "message": { "type": "string" }
       }
     }
   }

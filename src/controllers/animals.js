@@ -1,5 +1,5 @@
 const mongodb = require('../data/database');
-const ObjectId = require('mongodb').ObjectId;
+const { ObjectId } = require('mongodb');
 
 // Create a new contact
 const createAnimal = async (req, res) => {
@@ -36,37 +36,36 @@ const createAnimal = async (req, res) => {
 };
 
 // retrieve all animals
-const getAllAnimals = (req, res) => {
+const getAllAnimals = async (req, res) => {
       // #swagger.tags=['Animals']
-  mongodb
-    .getDatabase()
-    .db('w03-through-w04')
-    .collection('animals')
-    .find()
-    .toArray((err, animals) => {
-      if (err) {
-        res.status(400).json({ message: err });
-      }
+    const result = await mongodb.getDatabase().db("w03-through-w04").collection("animals").find();
+
+    result.toArray().then((animals) => {
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(animals);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message || err });
     });
 };
 
 // retrieve a single animal by id
-const getAnimalById = (req, res) => {
+const getAnimalById = async (req, res) => {
       // #swagger.tags=['Animals']
-  const animalId = new ObjectId(req.params.id);
-  mongodb
-    .getDatabase()
-    .db('w03-through-w04')
-    .collection('animals')
-    .find({ _id: animalId })
-    .toArray((err, result) => {
-      if (err) {
-        res.status(400).json({ message: err });
+
+    const animalId = new ObjectId(req.params.id);
+    const result = await mongodb.getDatabase().db("w03-through-w04").collection("animals").find({ _id: animalId });
+
+    result.toArray().then((animals) => {
+      if (!animals[0]) {
+        return res.status(404).json({ message: 'Animal not found' });
       }
+      
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(result[0]);
+      res.status(200).json(animals[0]);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message || err });
     });
 };
 

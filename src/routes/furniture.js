@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { ObjectId } = require('mongodb');
 
 const furnitureController = require('../controllers/furniture');
 const validation = require('../middleware/validate');

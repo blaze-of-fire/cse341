@@ -36,37 +36,35 @@ const createFurniture = async (req, res) => {
 };
 
 // retrieve all furniture
-const getAllFurniture = (req, res) => {
+const getAllFurniture = async (req, res) => {
     // #swagger.tags=['Furniture']
-  mongodb
-    .getDatabase()
-    .db('w03-through-w04')
-    .collection('furniture')
-    .find()
-    .toArray((err, lists) => {
-      if (err) {
-        res.status(400).json({ message: err });
-      }
-      res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(lists);
+    const result = await mongodb.getDatabase().db("w03-through-w04").collection("furniture").find();
+
+    result.toArray().then((furniture) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(furniture);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message || err });
     });
 };
 
 // retrieve furniture by id
-const getFurnitureById = (req, res) => {
+const getFurnitureById = async (req, res) => {
     // #swagger.tags=['Furniture']
     const furnitureId = new ObjectId(req.params.id);
-    mongodb
-    .getDatabase()
-    .db('w03-through-w04')
-    .collection('furniture')
-    .find({ _id: furnitureId })
-    .toArray((err, result) => {
-      if (err) {
-        res.status(400).json({ message: err });
-      }
-      res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(result[0]);
+    const result = await mongodb.getDatabase().db("w03-through-w04").collection("furniture").find({ _id: furnitureId });
+
+    result.toArray().then((furniture) => {
+        if (!furniture[0]) {
+          return res.status(404).json({ message: 'Furniture not found' });
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(furniture[0]);
+    })
+    .catch((err) => {
+      res.status(400).json({ message: err.message || err });
     });
 };
 
