@@ -58,9 +58,9 @@ passport.deserializeUser((user, done) => {
     done(null, user);
 });
 
-app.get((req, res) => { res.send(req.session.user) !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out"})
+app.get("/", (req, res) => { res.send(req.session.user) !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out"})
 
-app.get("github/callback", passport.authenticate("github", {
+app.get("/github/callback", passport.authenticate("github", {
     failureRedirect: "/api-docs", session: false}),
     (req, res) => {
         req.session.user = req.user;
