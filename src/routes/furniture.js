@@ -4,6 +4,7 @@ const { ObjectId } = require('mongodb');
 
 const furnitureController = require('../controllers/furniture');
 const validation = require('../middleware/validate');
+const { isAuthenticated } = require("../middleware/authenticate")
 
 router.param('id', (req, res, next, value) => {
   if (!ObjectId.isValid(value)) {
@@ -19,11 +20,11 @@ router.get("/", furnitureController.getAllFurniture);
 
 router.get("/:id", furnitureController.getFurnitureById);
 
-router.post("/", validation.saveFurniture, furnitureController.createFurniture);
+router.post("/", isAuthenticated, validation.saveFurniture, furnitureController.createFurniture);
 
-router.put("/:id", validation.saveFurniture, furnitureController.updateFurniture);
+router.put("/:id", isAuthenticated, validation.saveFurniture, furnitureController.updateFurniture);
 
-router.delete("/:id", furnitureController.deleteFurniture);
+router.delete("/:id", isAuthenticated, furnitureController.deleteFurniture);
 
 
 module.exports = router;
